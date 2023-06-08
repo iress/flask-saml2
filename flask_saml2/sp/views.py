@@ -86,8 +86,8 @@ class AssertionConsumer(SAML2View):
                 response = handler.get_response_parser(saml_request)
                 auth_data = handler.get_auth_data(response)
                 return self.sp.login_successful(auth_data, relay_state)
-            except CannotHandleAssertion:
-                continue
+            except CannotHandleAssertion as e:
+                logger.exception(f"Got exception {e} when handling auth response")
             except UserNotAuthorized:
                 return self.sp.render_template('flask_saml2_sp/user_not_authorized.html')
 
